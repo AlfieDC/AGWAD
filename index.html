@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b6f78">
+  <title>AGWAD | Environmental Monitoring</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#overview" aria-label="AGWAD home">
+        <span class="brand-mark">A</span>
+        <span><strong>AGWAD</strong><small>WATER MONITORING</small></span>
+      </a>
+
+      <div class="side-label">WORKSPACE</div>
+      <nav class="side-nav" aria-label="Main navigation">
+        <a class="nav-link active" href="#overview"><span class="nav-icon">▦</span> Overview</a>
+        <a class="nav-link" href="#locations"><span class="nav-icon">⌖</span> Map & Locations</a>
+        <a class="nav-link" href="#readings"><span class="nav-icon">⌁</span> Nitrate Readings</a>
+        <a class="nav-link" href="#records"><span class="nav-icon">▤</span> Filtration Records</a>
+      </nav>
+
+      <div class="side-label tools-label">SYSTEM</div>
+      <nav class="side-nav">
+        <a class="nav-link" href="#device"><span class="nav-icon">◉</span> Device Status</a>
+        <a class="nav-link" href="#reports"><span class="nav-icon">▧</span> Reports</a>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="sidebar-status"><span class="status-dot"></span><span><b>Prototype mode</b><small>Device feed not connected</small></span></div>
+        <div class="sidebar-foot">AGWAD Monitoring System<br><span>Research prototype · 2026</span></div>
+      </div>
+    </aside>
+
+    <main class="main-content" id="overview">
+      <header class="topbar">
+        <div class="mobile-brand"><span class="brand-mark">A</span><strong>AGWAD</strong></div>
+        <div class="breadcrumb">Workspace <span>/</span> <b>Overview</b></div>
+        <div class="topbar-right">
+          <span class="connection-pill"><i></i> Offline</span>
+          <div class="avatar">AG</div>
+        </div>
+      </header>
+
+      <section class="page-heading">
+        <div>
+          <div class="eyebrow"><span class="eyebrow-line"></span> SORSOGON BAY · PHILIPPINES</div>
+          <h1>Environmental Overview</h1>
+          <p class="subtitle">Monitor nitrate measurements, sampling locations, and AGWAD device activity.</p>
+        </div>
+        <div class="heading-actions">
+          <span class="date-chip" id="todayLabel">--</span>
+          <button class="button button-primary" id="refreshButton" type="button"><span class="refresh-icon">↻</span> Refresh</button>
+        </div>
+      </section>
+
+      <div class="notice" role="status">
+        <span class="notice-icon">i</span>
+        <div><b>Waiting for device connection</b><p>This dashboard is using live-data placeholders. No actual nitrate, battery, or pump readings have been received yet.</p></div>
+        <span class="notice-tag">SETUP</span>
+      </div>
+
+      <section class="metrics-grid" aria-label="Monitoring summary">
+        <article class="metric-card">
+          <div class="metric-top"><span class="metric-label">Current nitrate level</span><span class="metric-icon aqua">≈</span></div>
+          <div class="metric-value">-- <small>mg/L</small></div>
+          <div class="metric-foot"><span class="muted-dot"></span> Awaiting sensor reading</div>
+        </article>
+        <article class="metric-card">
+          <div class="metric-top"><span class="metric-label">Battery level</span><span class="metric-icon blue">ϟ</span></div>
+          <div class="metric-value">-- <small>%</small></div>
+          <div class="metric-foot"><span class="muted-dot"></span> Awaiting power telemetry</div>
+        </article>
+        <article class="metric-card">
+          <div class="metric-top"><span class="metric-label">Water pump</span><span class="metric-icon green">◉</span></div>
+          <div class="metric-value word-value">Unknown</div>
+          <div class="metric-foot"><span class="muted-dot"></span> No relay status received</div>
+        </article>
+        <article class="metric-card">
+          <div class="metric-top"><span class="metric-label">Device connection</span><span class="metric-icon violet">⌁</span></div>
+          <div class="metric-value word-value">Offline</div>
+          <div class="metric-foot"><span class="offline-dot"></span> ESP32 not connected</div>
+        </article>
+      </section>
+
+      <section class="content-grid">
+        <article class="panel map-panel" id="locations">
+          <div class="panel-heading">
+            <div><h2>Sampling locations</h2><p>Planned monitoring areas around Sorsogon Bay</p></div>
+            <span class="panel-badge"><span class="status-dot"></span> 4 planned sites</span>
+          </div>
+          <div id="agwadMap" class="map-placeholder" aria-label="Interactive map showing the Sorsogon Bay region"></div>
+          <div class="map-note"><span class="legend-dot"></span> Regional map view · Exact sampling pins will be added after GPS coordinates are verified.</div>
+          <div class="location-list">
+            <div class="location-item"><span class="location-number">01</span><span><b>Rompeolas</b><small>Sorsogon City</small></span><em>Coordinates pending</em></div>
+            <div class="location-item"><span class="location-number">02</span><span><b>Macalaya Port</b><small>Castilla</small></span><em>Coordinates pending</em></div>
+            <div class="location-item"><span class="location-number">03</span><span><b>Coastal area</b><small>Juban</small></span><em>Coordinates pending</em></div>
+            <div class="location-item"><span class="location-number">04</span><span><b>Coastal area</b><small>Casiguran</small></span><em>Coordinates pending</em></div>
+          </div>
+        </article>
+
+        <article class="panel chart-panel" id="readings">
+          <div class="panel-heading">
+            <div><h2>Nitrate trend</h2><p>Nitrate nitrogen readings over time</p></div>
+            <span class="unit-chip">mg/L</span>
+          </div>
+          <div class="chart-area">
+            <div class="chart-grid-lines"><i></i><i></i><i></i><i></i></div>
+            <div class="chart-empty">
+              <span class="chart-symbol">⌁</span>
+              <b>No readings available</b>
+              <p>Trend visualization will begin after the ESP32 sends sensor data.</p>
+            </div>
+            <div class="chart-axis"><span>12 AM</span><span>6 AM</span><span>12 PM</span><span>6 PM</span><span>Now</span></div>
+          </div>
+          <div class="chart-footer"><span><i class="legend-line"></i> Nitrate nitrogen</span><span>Last 24 hours</span></div>
+        </article>
+      </section>
+
+      <section class="bottom-grid">
+        <article class="panel table-panel" id="records">
+          <div class="panel-heading">
+            <div><h2>Recent filtration records</h2><p>Before-and-after nitrate comparison</p></div>
+            <span class="soft-label">Latest activity</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>LOCATION</th><th>BEFORE</th><th>AFTER</th><th>DATE & TIME</th><th>STATUS</th></tr></thead>
+              <tbody><tr><td colspan="5" class="empty-table"><span>▤</span><b>No filtration records yet</b><small>Records will appear when a treatment cycle is completed.</small></td></tr></tbody>
+            </table>
+          </div>
+        </article>
+
+        <article class="panel device-panel" id="device">
+          <div class="panel-heading"><div><h2>Device status</h2><p>AGWAD prototype components</p></div><span class="device-status">Offline</span></div>
+          <div class="device-row"><span class="device-symbol">▣</span><span><b>ESP32 controller</b><small>Main control unit</small></span><em class="state-off">Not connected</em></div>
+          <div class="device-row"><span class="device-symbol">◉</span><span><b>Nitrate sensor</b><small>Water measurement</small></span><em class="state-off">No data</em></div>
+          <div class="device-row"><span class="device-symbol">ϟ</span><span><b>Solar power system</b><small>Panel and battery</small></span><em class="state-off">No data</em></div>
+          <div class="device-row"><span class="device-symbol">⇄</span><span><b>Water pump</b><small>Filtration flow</small></span><em class="state-off">Unknown</em></div>
+          <div class="last-update">Last data received <b>Never</b></div>
+        </article>
+      </section>
+
+      <footer class="footer" id="reports">
+        <span>© 2026 AGWAD Research Project</span>
+        <span>Automated nitrate monitoring · Sorsogon Bay</span>
+      </footer>
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    </main>
+  </div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="script.js"></script>
+</body>
+</html>
